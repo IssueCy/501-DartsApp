@@ -88,9 +88,14 @@ body {
 }
 
 #createPlayersContainer {
-    
+    display: none;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
 }
 
 #name_input_field {
-
+    padding: 6px;
+    border: 1px solid var(--border-color-primary);
+    border-radius: 6px;
 }
