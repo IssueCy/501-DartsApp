@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>501</title>
+    <link rel="icon" href="img/dart.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+<div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores rerum exercitationem quibusdam velit deserunt ipsa iusto harum dolores incidunt aliquam.
+</div>
+
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log('Service Worker registered'))
+                .catch(err => console.error('Service Worker registration failed:', err));
+        }
+    </script>
+</body>
+</html>
