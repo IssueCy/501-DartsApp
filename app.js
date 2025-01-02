@@ -1,6 +1,4 @@
-let players = {
-    "player1" : "merix"
-};
+let players = [];
 
 window.onload = () => {
     if (!localStorage.getItem("players")) {
