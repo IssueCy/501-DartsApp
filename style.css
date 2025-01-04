@@ -20,6 +20,7 @@
     padding: 6px 16px;
     font-weight: bold;
     transition: 0.1s;
+    box-shadow: 10px 5px 20px rgba(75, 75, 75, 0.688);
 }
 
 .button_primary:active {
@@ -98,4 +99,34 @@ body {
     padding: 6px;
     border: 1px solid var(--border-color-primary);
     border-radius: 6px;
+}
+
+#players-container {
+    padding: 12px;
+}
+
+.playerElementContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.playerElementContainer span {
+    font-size: 1.2rem;
+}
+
+.playerElementContainer input {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+}
+
+.playerElementContainer button {
+    margin-left: auto; 
+    border: none;
+}
+
+.playerElementContainer img {
+ width: 32px;
 }
