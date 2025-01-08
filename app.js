@@ -5,9 +5,9 @@ let confirmAddPlayer_button = document.getElementById('confirmAddPlayer_button')
 let players = [];
 
 window.onload = () => {
-    const players_container = document.getElementById('players-container');
-    
     if (window.location.pathname.endsWith('index.html')) {
+        const players_container = document.getElementById('players-container');
+        
         if (!localStorage.getItem("players")) {
             localStorage.setItem("players", JSON.stringify(players));
         } else {
@@ -47,15 +47,21 @@ window.onload = () => {
             });
         }
     } else if (window.location.pathname.endsWith('game-panel.html')) {
-        console.info('Onload function for game-panel.html can be executed here');
+        const scores_container = document.getElementById('scores-container');
+        const participants = JSON.parse(localStorage.getItem('participants') || '[]');
+
+        participants.forEach((player) => {
+            let playerContainer = document.createElement('div');
+            playerContainer.id = "player-container";
+            playerContainer.textContent = player;
+            scores_container.appendChild(playerContainer);
+        });
     }
 };
-
 
 function quitApp() {
     window.close();
 }
-
 
 if (addPlayer_button) {
     addPlayer_button.addEventListener('click', () => {
@@ -75,7 +81,6 @@ if (confirmAddPlayer_button) {
             
             localStorage.setItem("players", JSON.stringify(players));
             
-            //? display the names in the player container
             const playerElement = document.createElement('div');
             playerElement.classList.add('playerElementContainer');
             
@@ -100,29 +105,26 @@ if (confirmAddPlayer_button) {
             addPlayer_button.style.display = "block";
             create_player_container.style.display = "none";
         }
-        
     }
 }
 
 function startGame() {
-    const checkboxes = document.querySelectorAll('.playerElementContainer input[type="checkbox"]');
-
+    let checkboxes = document.querySelectorAll('.playerElementContainer input[type="checkbox"]');
     let participants = [];
 
-    checkboxes.forEach((checkbox, index) => {
+    checkboxes.forEach((checkbox) => {
         if (checkbox.checked) {
             const playerName = checkbox.parentElement.querySelector('span').textContent;
             participants.push(playerName);
         }
     });
 
-    console.log('Participants: ', participants + '\n' + 'Legnth: ' + participants.length);
+    console.log('Participants: ', participants + '\n' + 'Length: ' + participants.length);
 
     if (participants.length >= 2) {
+        localStorage.setItem('participants', JSON.stringify(participants));
         window.location.href = "game-panel.html";
-
     } else {
-        alert("FEHLER: Es müssen mindestens 2 Spieler ausgewählt sein.")
+        alert("FEHLER: Es müssen mindestens 2 Spieler ausgewählt sein.");
     }
-
 }
