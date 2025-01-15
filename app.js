@@ -60,7 +60,11 @@ window.onload = () => {
 };
 
 function quitApp() {
-    window.close();
+    if (window.location.href.endsWith("game-panel.html")) {
+        window.location.href = "index.html";
+    } else {
+        window.close();
+    }
 }
 
 if (addPlayer_button) {
@@ -121,10 +125,10 @@ function startGame() {
 
     console.log('Participants: ', participants + '\n' + 'Length: ' + participants.length);
 
-    if (participants.length >= 2) {
+    if (participants.length >= 2 && participants.length <= 6) {
         localStorage.setItem('participants', JSON.stringify(participants));
         window.location.href = "game-panel.html";
     } else {
-        alert("FEHLER: Es müssen mindestens 2 Spieler ausgewählt sein.");
+        alert("FEHLER: Es müssen mindestens 2 und maximal 6 Spieler ausgewählt sein.");
     }
 }
