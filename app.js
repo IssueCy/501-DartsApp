@@ -48,14 +48,45 @@ window.onload = () => {
         }
     } else if (window.location.pathname.endsWith('game-panel.html')) {
         const scores_container = document.getElementById('scores-container');
+        const displayContainer = document.getElementById('displayContainer');
         const participants = JSON.parse(localStorage.getItem('participants') || '[]');
 
+        function highlightCurrentPlayer(index) {
+            const scoresContainer_iterate = document.querySelectorAll('#player-container');
+            scoresContainer_iterate.forEach((container, i) => {
+                if (i === index) {
+                    container.style.backgroundColor = 'lightblue';
+                    container.style.border = '2px solid orange';
+                } else {
+                    container.style.backgroundColor = '';
+                    container.style.border = '';
+                }
+            });
+        } 
         participants.forEach((player) => {
             let playerContainer = document.createElement('div');
             playerContainer.id = "player-container";
             playerContainer.textContent = player;
             scores_container.appendChild(playerContainer);
         });
+
+        let currentPlayerIndex = 0;
+        highlightCurrentPlayer(currentPlayerIndex);
+
+        const enterButton = document.getElementById('enter-button');
+        enterButton.addEventListener("click", () => {
+            currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
+            highlightCurrentPlayer(currentPlayerIndex);
+            displayContainer.innerHTML = "";
+        });
+
+        document.querySelectorAll('.number-button').forEach(button => {
+            button.addEventListener('click', () => {
+                displayContainer.innerHTML += button.getAttribute('data-value');
+            });
+        });
+        
+
     }
 };
 
