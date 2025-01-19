@@ -63,20 +63,40 @@ window.onload = () => {
                 }
             });
         } 
+
+        let playerContainers = [];
+
         participants.forEach((player) => {
             let playerContainer = document.createElement('div');
             playerContainer.id = "player-container";
             playerContainer.textContent = player;
             scores_container.appendChild(playerContainer);
+            playerContainers.push(playerContainer);
         });
 
         let currentPlayerIndex = 0;
         highlightCurrentPlayer(currentPlayerIndex);
 
-        const enterButton = document.getElementById('enter-button');
-        enterButton.addEventListener("click", () => {
-            currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
-            highlightCurrentPlayer(currentPlayerIndex);
+        document.getElementById('enter-button').addEventListener('click', () => {
+            if (displayContainer.innerText.length <= 3) {
+                if (displayContainer.innerText == "") {
+                    currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
+                    highlightCurrentPlayer(currentPlayerIndex);
+                } else {
+                    let score = displayContainer.innerText;
+                    playerContainers[currentPlayerIndex].innerText += `\n${score}`;            
+                    displayContainer.innerHTML = "";
+                    
+                    currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
+                    highlightCurrentPlayer(currentPlayerIndex);
+                }
+            } else {
+                alert("Error: invalid score entered");
+                displayContainer.innerHTML = "";
+            }
+        });
+
+        document.getElementById('delete-button').addEventListener('click', () => {
             displayContainer.innerHTML = "";
         });
 
