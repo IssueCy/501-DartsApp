@@ -86,7 +86,7 @@ window.onload = () => {
                     let score = displayContainer.innerText;
                     playerContainers[currentPlayerIndex].innerText += `\n${score}`;            
                     displayContainer.innerHTML = "";
-                    
+                      
                     currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
                     highlightCurrentPlayer(currentPlayerIndex);
                 }
