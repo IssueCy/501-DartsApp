@@ -7,7 +7,7 @@ let players = [];
 window.onload = () => {
     if (window.location.pathname.endsWith('index.html')) {
         const players_container = document.getElementById('players-container');
-        
+
         if (!localStorage.getItem("players")) {
             localStorage.setItem("players", JSON.stringify(players));
         } else {
@@ -55,38 +55,58 @@ window.onload = () => {
             const scoresContainer_iterate = document.querySelectorAll('#player-container');
             scoresContainer_iterate.forEach((container, i) => {
                 if (i === index) {
-                    container.style.backgroundColor = 'lightblue';
-                    container.style.border = '2px solid orange';
+                    container.style.outline = '4px solid red';
                 } else {
-                    container.style.backgroundColor = '';
-                    container.style.border = '';
+                    container.style.outline = '';
                 }
             });
-        } 
+        }
 
         let playerContainers = [];
+        let playerScores = {};
+        let currentPlayerIndex = 0;
+        let previousPlayerIndex = 0;
 
         participants.forEach((player) => {
             let playerContainer = document.createElement('div');
             playerContainer.id = "player-container";
-            playerContainer.textContent = player;
+
+            let nameContainer = document.createElement('div');
+            nameContainer.id = "name-container";
+            nameContainer.textContent = player;
+
+            let scoreContainer = document.createElement('div');
+            scoreContainer.id = "score-container";
+            scoreContainer.textContent = "501";
+
+            playerContainer.appendChild(nameContainer);
+            playerContainer.appendChild(scoreContainer);
             scores_container.appendChild(playerContainer);
-            playerContainers.push(playerContainer);
+
+            playerContainers.push({ playerContainer, nameContainer, scoreContainer });
+            playerScores[player] = 501;
         });
 
-        let currentPlayerIndex = 0;
         highlightCurrentPlayer(currentPlayerIndex);
 
         document.getElementById('enter-button').addEventListener('click', () => {
-            if (displayContainer.innerText.length <= 3) {
+            if (displayContainer.innerText.length <= 3 && Number(displayContainer.innerText <= 180)) {
                 if (displayContainer.innerText == "") {
+                    previousPlayerIndex = currentPlayerIndex;
                     currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
                     highlightCurrentPlayer(currentPlayerIndex);
                 } else {
-                    let score = displayContainer.innerText;
-                    playerContainers[currentPlayerIndex].innerText += `\n${score}`;            
+                    let score = parseInt(displayContainer.innerText, 10);
+                    let currentPlayer = participants[currentPlayerIndex];
+                    playerScores[currentPlayer] -= score;
+
+                    let { nameContainer, scoreContainer } = playerContainers[currentPlayerIndex];
+                    nameContainer.textContent = currentPlayer;
+                    scoreContainer.textContent = playerScores[currentPlayer];
+
                     displayContainer.innerHTML = "";
-                      
+
+                    previousPlayerIndex = currentPlayerIndex;
                     currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
                     highlightCurrentPlayer(currentPlayerIndex);
                 }
@@ -105,18 +125,16 @@ window.onload = () => {
                 displayContainer.innerHTML += button.getAttribute('data-value');
             });
         });
-        
+
+        function returnToLastPlayer() {
+            currentPlayerIndex = previousPlayerIndex;
+            highlightCurrentPlayer(currentPlayerIndex);
+        }
+
+        document.getElementById('returnToLastPlayer').addEventListener('click', returnToLastPlayer);        
 
     }
 };
-
-function quitApp() {
-    if (window.location.href.endsWith("game-panel.html")) {
-        window.location.href = "index.html";
-    } else {
-        window.close();
-    }
-}
 
 if (addPlayer_button) {
     addPlayer_button.addEventListener('click', () => {
@@ -130,21 +148,21 @@ if (confirmAddPlayer_button) {
         const players_container = document.getElementById('players-container');
         let inputField = document.getElementById('name_input_field');
         let newName = inputField.value.trim();
-        
+
         if (newName) {
             players.push(newName);
-            
+
             localStorage.setItem("players", JSON.stringify(players));
-            
+
             const playerElement = document.createElement('div');
             playerElement.classList.add('playerElementContainer');
-            
+
             const playerName = document.createElement('span');
             playerName.textContent = newName;
 
             const addPlayerToParticipantList_tick = document.createElement('input');
             addPlayerToParticipantList_tick.type = "checkbox";
-            
+
             const deletePlayerFromParticipantList_button = document.createElement('button');
             const deleteIcon = document.createElement('img');
             deleteIcon.src = 'img/trashcan.webp';
@@ -181,5 +199,14 @@ function startGame() {
         window.location.href = "game-panel.html";
     } else {
         alert("FEHLER: Es müssen mindestens 2 und maximal 6 Spieler ausgewählt sein.");
+    }
+}
+
+function quitGame() {
+    if (confirm("Willst du die aktuelle Sitzung abbrechen?")) {
+        window.location.href = "index.html";
+        // TODO: remove current players from localstorage
+    } else {
+        return;
     }
 }

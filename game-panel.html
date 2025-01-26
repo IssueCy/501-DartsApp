@@ -31,13 +31,15 @@
             <button data-value="" id="enter-button" class="number-button">ENTER</button>
         </div>
 
-        <div id="displayContainer"></div>
+        <div id="display-wrapper">
+            <div id="placeholder">∑ </div>
+            <div id="displayContainer"></div>
+        </div>
     </div>    
 
     <div class="home-util-container home-util-container_secondary">
-        <button onclick="quitApp()" class="button_cancel" style="width: 44px;">X</button>
-        <button class="" style="width: 44px;"><a href="index.html"><img src="img/menu.svg" alt="Menu"></a></button>
-        <button class="" style="width: 44px;"><img src="img/return.svg" alt="Enter"></button>
+        <button onclick="quitGame()" style="width: 44px;"><img src="img/menu.svg" alt="Menu"></button>
+        <button id="returnToLastPlayer" style="width: 44px;"><img src="img/return.svg" alt="Enter"></button>
     </div>
 
     <script src="app.js"></script>
