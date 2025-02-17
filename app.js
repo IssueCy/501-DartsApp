@@ -89,6 +89,9 @@ window.onload = () => {
 
         highlightCurrentPlayer(currentPlayerIndex);
 
+        let previousScores = {};
+        let returnedToLastPlayer = false;
+
         document.getElementById('enter-button').addEventListener('click', () => {
             if (displayContainer.innerText.length <= 3 && Number(displayContainer.innerText <= 180)) {
                 if (displayContainer.innerText == "") {
@@ -98,14 +101,18 @@ window.onload = () => {
                 } else {
                     let score = parseInt(displayContainer.innerText, 10);
                     let currentPlayer = participants[currentPlayerIndex];
+                    
+                    // Store the previous score
+                    previousScores[currentPlayer] = playerScores[currentPlayer];
+                    
                     playerScores[currentPlayer] -= score;
-
+        
                     let { nameContainer, scoreContainer } = playerContainers[currentPlayerIndex];
                     nameContainer.textContent = currentPlayer;
                     scoreContainer.textContent = playerScores[currentPlayer];
-
+        
                     displayContainer.innerHTML = "";
-
+        
                     previousPlayerIndex = currentPlayerIndex;
                     currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
                     highlightCurrentPlayer(currentPlayerIndex);
@@ -115,24 +122,34 @@ window.onload = () => {
                 displayContainer.innerHTML = "";
             }
         });
-
-        document.getElementById('delete-button').addEventListener('click', () => {
-            displayContainer.innerHTML = "";
-        });
-
+        
         document.querySelectorAll('.number-button').forEach(button => {
             button.addEventListener('click', () => {
                 displayContainer.innerHTML += button.getAttribute('data-value');
             });
         });
-
+        
         function returnToLastPlayer() {
             currentPlayerIndex = previousPlayerIndex;
             highlightCurrentPlayer(currentPlayerIndex);
+            returnedToLastPlayer = true;
         }
-
+        
         document.getElementById('returnToLastPlayer').addEventListener('click', returnToLastPlayer);        
-
+        
+        document.getElementById('delete-button').addEventListener('click', () => {
+            if (returnedToLastPlayer) {
+                let currentPlayer = participants[currentPlayerIndex];
+                playerScores[currentPlayer] = previousScores[currentPlayer];
+        
+                let { nameContainer, scoreContainer } = playerContainers[currentPlayerIndex];
+                nameContainer.textContent = currentPlayer;
+                scoreContainer.textContent = playerScores[currentPlayer];
+        
+                returnedToLastPlayer = false;
+            }
+            displayContainer.innerHTML = "";
+        });
     }
 };
 
@@ -205,7 +222,6 @@ function startGame() {
 function quitGame() {
     if (confirm("Willst du die aktuelle Sitzung abbrechen?")) {
         window.location.href = "index.html";
-        // TODO: remove current players from localstorage
     } else {
         return;
     }
