@@ -55,7 +55,7 @@ window.onload = () => {
             const scoresContainer_iterate = document.querySelectorAll('#player-container');
             scoresContainer_iterate.forEach((container, i) => {
                 if (i === index) {
-                    container.style.outline = '4px solid red';
+                    container.style.outline = '4px solid rgba(0, 153, 255, 0.61)';
                 } else {
                     container.style.outline = '';
                 }
@@ -93,19 +93,17 @@ window.onload = () => {
         let returnedToLastPlayer = false;
 
         document.getElementById('enter-button').addEventListener('click', () => {
-            if (displayContainer.innerText.length <= 3 && Number(displayContainer.innerText <= 180)) {
+            let enteredScore = parseInt(displayContainer.innerText, 10);
+            if (displayContainer.innerText.length <= 3 && enteredScore <= 180 || displayContainer.innerText == "") {
+                let currentPlayer = participants[currentPlayerIndex];
                 if (displayContainer.innerText == "") {
                     previousPlayerIndex = currentPlayerIndex;
                     currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
                     highlightCurrentPlayer(currentPlayerIndex);
-                } else {
-                    let score = parseInt(displayContainer.innerText, 10);
-                    let currentPlayer = participants[currentPlayerIndex];
-                    
-                    // Store the previous score
+                } else if (enteredScore <= playerScores[currentPlayer]) {
                     previousScores[currentPlayer] = playerScores[currentPlayer];
                     
-                    playerScores[currentPlayer] -= score;
+                    playerScores[currentPlayer] -= enteredScore;
         
                     let { nameContainer, scoreContainer } = playerContainers[currentPlayerIndex];
                     nameContainer.textContent = currentPlayer;
@@ -113,9 +111,24 @@ window.onload = () => {
         
                     displayContainer.innerHTML = "";
         
-                    previousPlayerIndex = currentPlayerIndex;
-                    currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
+                    if (playerScores[currentPlayer] === 0) {
+                        alert(`${currentPlayer} hat den 1. Platz belegt!`);
+                        participants.splice(currentPlayerIndex, 1);
+                        playerContainers.splice(currentPlayerIndex, 1);
+                        if (participants.length === 1) {
+                            alert("The game is over!");
+                            return;
+                        }
+                        currentPlayerIndex = currentPlayerIndex % participants.length;
+                    } else {
+                        previousPlayerIndex = currentPlayerIndex;
+                        currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
+                    }
+                    
                     highlightCurrentPlayer(currentPlayerIndex);
+                } else {
+                    alert("Error: Eingegebener Score is größer als der Spieler-score");
+                    displayContainer.innerHTML = "";
                 }
             } else {
                 alert("Error: invalid score entered");
@@ -142,7 +155,6 @@ window.onload = () => {
                 let currentPlayer = participants[currentPlayerIndex];
                 
                 if (playerScores[currentPlayer] === 501) {
-                    console.log("Player's score is still 501, nothing to delete.");
                     displayContainer.innerHTML = "";
                     return;
                 }
@@ -231,7 +243,5 @@ function startGame() {
 function quitGame() {
     if (confirm("Willst du die aktuelle Sitzung abbrechen?")) {
         window.location.href = "index.html";
-    } else {
-        return;
     }
 }
