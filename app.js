@@ -140,13 +140,22 @@ window.onload = () => {
         document.getElementById('delete-button').addEventListener('click', () => {
             if (returnedToLastPlayer) {
                 let currentPlayer = participants[currentPlayerIndex];
-                playerScores[currentPlayer] = previousScores[currentPlayer];
-        
-                let { nameContainer, scoreContainer } = playerContainers[currentPlayerIndex];
-                nameContainer.textContent = currentPlayer;
-                scoreContainer.textContent = playerScores[currentPlayer];
-        
-                returnedToLastPlayer = false;
+                
+                if (playerScores[currentPlayer] === 501) {
+                    console.log("Player's score is still 501, nothing to delete.");
+                    displayContainer.innerHTML = "";
+                    return;
+                }
+                
+                if (previousScores[currentPlayer] !== undefined) {
+                    playerScores[currentPlayer] = previousScores[currentPlayer];
+                    
+                    let { nameContainer, scoreContainer } = playerContainers[currentPlayerIndex];
+                    nameContainer.textContent = currentPlayer;
+                    scoreContainer.textContent = playerScores[currentPlayer];
+                    
+                    returnedToLastPlayer = false;
+                }
             }
             displayContainer.innerHTML = "";
         });

@@ -61,7 +61,7 @@ html, body {
     font-weight: bold;
     font-size: 24px;
     background: #FF9E00;
-    background: linear-gradient(to right, #FF9E00 26%, #ffd000b9 100%);
+    background: linear-gradient(to right, #00b7ff 26%, #264bf1b2 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
