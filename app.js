@@ -94,7 +94,7 @@ window.onload = () => {
 
         document.getElementById('enter-button').addEventListener('click', () => {
             let enteredScore = parseInt(displayContainer.innerText, 10);
-            if (displayContainer.innerText.length <= 3 && enteredScore <= 180 || displayContainer.innerText == "") {
+            if (displayContainer.innerText.length <= 3 && enteredScore <= 180 || displayContainer.innerHTML == "") {
                 let currentPlayer = participants[currentPlayerIndex];
                 if (displayContainer.innerText == "") {
                     previousPlayerIndex = currentPlayerIndex;
@@ -112,14 +112,22 @@ window.onload = () => {
                     displayContainer.innerHTML = "";
         
                     if (playerScores[currentPlayer] === 0) {
-                        alert(`${currentPlayer} hat den 1. Platz belegt!`);
-                        participants.splice(currentPlayerIndex, 1);
-                        playerContainers.splice(currentPlayerIndex, 1);
-                        if (participants.length === 1) {
-                            alert("The game is over!");
-                            return;
-                        }
-                        currentPlayerIndex = currentPlayerIndex % participants.length;
+                        Swal.fire({
+                            title: "Spiel beendet!",
+                            text: `${currentPlayer} hat das Spiel gewonnen!`,
+                            icon: "info",
+                            showCancelButton: true,
+                            confirmButtonText: 'Neues Spiel',
+                            cancelButtonText: 'Beenden',
+                            preConfirm: () => {
+                                startGame(participants);
+                            }
+                        }).then((result) => {
+                            if (result.isDismissed) {
+                                window.location.href = "index.html";
+                            }
+                        });
+                        return;
                     } else {
                         previousPlayerIndex = currentPlayerIndex;
                         currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
@@ -127,7 +135,7 @@ window.onload = () => {
                     
                     highlightCurrentPlayer(currentPlayerIndex);
                 } else {
-                    alert("Error: Eingegebener Score is größer als der Spieler-score");
+                    alert("Error: Eingegebener Score ist größer als der Spieler-score");
                     displayContainer.innerHTML = "";
                 }
             } else {
@@ -219,25 +227,28 @@ if (confirmAddPlayer_button) {
     }
 }
 
-function startGame() {
-    let checkboxes = document.querySelectorAll('.playerElementContainer input[type="checkbox"]');
-    let participants = [];
+function startGame(participants = null) {
+    if (!participants) {
+        let checkboxes = document.querySelectorAll('.playerElementContainer input[type="checkbox"]');
+        participants = [];
 
-    checkboxes.forEach((checkbox) => {
-        if (checkbox.checked) {
-            const playerName = checkbox.parentElement.querySelector('span').textContent;
-            participants.push(playerName);
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+                const playerName = checkbox.parentElement.querySelector('span').textContent;
+                participants.push(playerName);
+            }
+        });
+
+        console.log('Participants: ', participants + '\n' + 'Length: ' + participants.length);
+
+        if (participants.length < 2 || participants.length > 6) {
+            alert("FEHLER: Es müssen mindestens 2 und maximal 6 Spieler ausgewählt sein.");
+            return;
         }
-    });
-
-    console.log('Participants: ', participants + '\n' + 'Length: ' + participants.length);
-
-    if (participants.length >= 2 && participants.length <= 6) {
-        localStorage.setItem('participants', JSON.stringify(participants));
-        window.location.href = "game-panel.html";
-    } else {
-        alert("FEHLER: Es müssen mindestens 2 und maximal 6 Spieler ausgewählt sein.");
     }
+
+    localStorage.setItem('participants', JSON.stringify(participants));
+    window.location.href = "game-panel.html";
 }
 
 function quitGame() {
