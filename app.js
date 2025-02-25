@@ -166,6 +166,11 @@ window.onload = () => {
                     displayContainer.innerHTML = "";
                     return;
                 }
+
+                if (displayContainer.innerHTML != "") {
+                    displayContainer.innerHTML = "";
+                    return;
+                }
                 
                 if (previousScores[currentPlayer] !== undefined) {
                     playerScores[currentPlayer] = previousScores[currentPlayer];
