@@ -5,7 +5,8 @@ let confirmAddPlayer_button = document.getElementById('confirmAddPlayer_button')
 let players = [];
 
 window.onload = () => {
-    if (window.location.pathname.endsWith('index.html')) {
+    const pathname = window.location.pathname;
+    if (pathname === '/' || pathname.endsWith('index.html')) {
         const players_container = document.getElementById('players-container');
 
         if (!localStorage.getItem("players")) {
@@ -46,7 +47,7 @@ window.onload = () => {
                 players_container.appendChild(playerElement);
             });
         }
-    } else if (window.location.pathname.endsWith('game-panel.html')) {
+    } else if (pathname.endsWith('game-panel.html') || pathname.endsWith('game-panel')) {
         const scores_container = document.getElementById('scores-container');
         const displayContainer = document.getElementById('displayContainer');
         const participants = JSON.parse(localStorage.getItem('participants') || '[]');
