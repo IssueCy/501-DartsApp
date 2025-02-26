@@ -93,10 +93,17 @@ window.onload = () => {
         let previousScores = {};
         let returnedToLastPlayer = false;
 
+        const impossibleNumbers = [179, 178, 176, 175, 173, 172, 169, 166, 163];
+
         document.getElementById('enter-button').addEventListener('click', () => {
             let enteredScore = parseInt(displayContainer.innerText, 10);
             if (displayContainer.innerText.length <= 3 && enteredScore <= 180 || displayContainer.innerHTML == "") {
                 let currentPlayer = participants[currentPlayerIndex];
+                if (impossibleNumbers.includes(parseInt(displayContainer.innerHTML, 10))) {
+                    displayContainer.innerHTML = "";
+                    alert("Error: Dieser Betrag ist unmöglich zu werfen");
+                    return;
+                }
                 if (displayContainer.innerText == "") {
                     previousPlayerIndex = currentPlayerIndex;
                     currentPlayerIndex = (currentPlayerIndex + 1) % participants.length;
@@ -140,7 +147,7 @@ window.onload = () => {
                     displayContainer.innerHTML = "";
                 }
             } else {
-                alert("Error: invalid score entered");
+                alert("Error: Fehlerhafter Betrag");
                 displayContainer.innerHTML = "";
             }
         });
