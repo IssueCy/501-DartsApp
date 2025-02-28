@@ -254,8 +254,8 @@ function startGame(participants = null) {
 
         console.log('Participants: ', participants + '\n' + 'Length: ' + participants.length);
 
-        if (participants.length < 2 || participants.length > 6) {
-            alert("FEHLER: Es müssen mindestens 2 und maximal 6 Spieler ausgewählt sein.");
+        if (participants.length < 1 || participants.length > 6) {
+            alert("FEHLER: Es müssen mindestens 1 und maximal 6 Spieler ausgewählt sein.");
             return;
         }
     }
